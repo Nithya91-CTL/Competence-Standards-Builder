@@ -1,0 +1,1409 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Competence Standards Builder</title>
+    <style>
+      :root {
+        --ink: #172033;
+        --muted: #667589;
+        --navy: #002147;
+        --navy-2: #06366f;
+        --teal: #006b73;
+        --teal-dark: #00545b;
+        --berry: #8f3151;
+        --gold: #a76b1f;
+        --paper: #ffffff;
+        --soft: #f5f7fa;
+        --line: #d8dee8;
+        --shadow: 0 14px 38px rgba(18, 34, 55, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        padding-bottom: 74px;
+        background: #eef4f7;
+        color: var(--ink);
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      button:disabled {
+        cursor: not-allowed;
+        opacity: 0.54;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .shell {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 0 22px 34px;
+      }
+
+      .top {
+        background: linear-gradient(90deg, var(--navy) 0%, var(--navy-2) 100%);
+        box-shadow: var(--shadow);
+        color: #fff;
+        margin: 0 calc(50% - 50vw) 22px;
+        padding: 18px 28px 17px;
+        width: 100vw;
+      }
+
+      .brand-row {
+        align-items: center;
+        display: flex;
+        gap: 28px;
+        justify-content: space-between;
+        margin: 0 auto;
+        max-width: 1480px;
+      }
+
+      .brand-main {
+        align-items: center;
+        display: flex;
+        flex: 1 1 auto;
+        gap: 28px;
+        min-width: 0;
+      }
+
+      .title-block {
+        flex: 1 1 auto;
+        min-width: 280px;
+      }
+
+      .title-bar-logo {
+        background: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        display: block;
+        flex: 0 0 auto;
+        height: 78px;
+        max-width: min(38vw, 360px);
+        object-fit: contain;
+        width: auto;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        color: #fff;
+        font-size: 32px;
+        font-weight: 700;
+        line-height: 1.1;
+      }
+
+      .description {
+        color: #f0f6fd;
+        font-size: 16px;
+        line-height: 1.45;
+        max-width: 780px;
+      }
+
+      .section-nav {
+        display: none;
+        flex-wrap: wrap;
+        gap: 9px;
+        margin-top: 8px;
+      }
+
+      .section-nav a {
+        background: rgba(255, 255, 255, 0.09);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 999px;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        padding: 9px 13px;
+        text-decoration: none;
+      }
+
+      .section-nav a:hover {
+        background: rgba(255, 255, 255, 0.16);
+      }
+
+      .tool-section {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        margin: 18px 0;
+        overflow: hidden;
+      }
+
+      .section-header {
+        align-items: start;
+        background: linear-gradient(90deg, #ffffff 0%, #f2f8fa 100%);
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        gap: 14px;
+        padding: 22px;
+      }
+
+      .section-number {
+        align-items: center;
+        background: var(--navy);
+        border-radius: 999px;
+        color: #fff;
+        display: inline-flex;
+        flex: 0 0 34px;
+        font-size: 15px;
+        font-weight: 700;
+        height: 34px;
+        justify-content: center;
+      }
+
+      .section-header h2 {
+        color: var(--navy);
+        font-size: 23px;
+        line-height: 1.2;
+      }
+
+      .section-header p {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.45;
+        margin-top: 6px;
+        max-width: 860px;
+      }
+
+      .section-body {
+        padding: 22px 22px 88px;
+      }
+
+      .input-grid {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: minmax(280px, 0.72fr) minmax(360px, 1.28fr);
+      }
+
+      .field {
+        display: grid;
+        gap: 8px;
+      }
+
+      .field + .field {
+        margin-top: 15px;
+      }
+
+      .field label,
+      .field span {
+        color: #24364c;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.35;
+      }
+
+      input,
+      select,
+      textarea {
+        background: #fff;
+        border: 1px solid #c8d2df;
+        border-radius: 7px;
+        color: var(--ink);
+        outline: none;
+        padding: 11px 12px;
+        width: 100%;
+      }
+
+      textarea {
+        line-height: 1.5;
+        min-height: 150px;
+        resize: vertical;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: var(--teal);
+        box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.14);
+      }
+
+      .upload-box {
+        align-items: center;
+        background: #edf7f5;
+        border: 1px dashed rgba(15, 118, 110, 0.42);
+        border-radius: 8px;
+        display: flex;
+        gap: 12px;
+        margin-top: 15px;
+        padding: 14px;
+      }
+
+      .upload-box input {
+        display: none;
+      }
+
+      .upload-icon {
+        align-items: center;
+        background: #fff;
+        border: 1px solid rgba(15, 118, 110, 0.22);
+        border-radius: 7px;
+        color: var(--teal-dark);
+        display: flex;
+        flex: 0 0 42px;
+        height: 42px;
+        justify-content: center;
+      }
+
+      svg {
+        fill: none;
+        height: 19px;
+        stroke: currentColor;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 2;
+        width: 19px;
+      }
+
+      .upload-box strong {
+        display: block;
+        font-size: 13px;
+      }
+
+      .upload-box small,
+      .status-line {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.4;
+      }
+
+      .status-line {
+        margin-top: 8px;
+        min-height: 17px;
+      }
+
+      .guidance-box {
+        background: #fbfcfe;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 16px;
+      }
+
+      .guidance-box h3 {
+        color: var(--navy);
+        font-size: 15px;
+        margin-bottom: 10px;
+      }
+
+      .guidance-box ul {
+        color: var(--muted);
+        display: grid;
+        gap: 8px;
+        font-size: 13px;
+        line-height: 1.42;
+        margin: 0;
+        padding-left: 18px;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 18px;
+      }
+
+      .primary,
+      .secondary {
+        align-items: center;
+        border: 0;
+        border-radius: 7px;
+        display: inline-flex;
+        font-weight: 700;
+        gap: 8px;
+        justify-content: center;
+        min-height: 43px;
+        padding: 0 16px;
+      }
+
+      .primary {
+        background: var(--navy);
+        color: #fff;
+      }
+
+      .primary:hover:not(:disabled) {
+        background: #001832;
+      }
+
+      .secondary {
+        background: #eef3f7;
+        color: var(--navy);
+      }
+
+      .output-grid {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: minmax(430px, 1.2fr) minmax(300px, 0.8fr);
+      }
+
+      .static-output,
+      .descriptor-panel,
+      .prompt-panel,
+      .resource-panel {
+        background: #fbfcfe;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 18px;
+      }
+
+      .placeholder {
+        align-items: center;
+        border: 1px dashed #cbd5e1;
+        border-radius: 8px;
+        color: var(--muted);
+        display: flex;
+        font-size: 14px;
+        justify-content: center;
+        min-height: 180px;
+        padding: 18px;
+        text-align: center;
+      }
+
+      .standards-list {
+        display: grid;
+        gap: 14px;
+      }
+
+      .standard {
+        background: #fff;
+        border: 1px solid #dbe3ec;
+        border-left: 4px solid var(--teal);
+        border-radius: 8px;
+        padding: 14px;
+      }
+
+      .standard:nth-child(2) {
+        border-left-color: var(--gold);
+      }
+
+      .standard:nth-child(3) {
+        border-left-color: var(--berry);
+      }
+
+      .standard h3 {
+        color: var(--navy);
+        font-size: 15px;
+        line-height: 1.3;
+        margin-bottom: 7px;
+      }
+
+      .standard p {
+        color: #29384d;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .standard .meta {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.42;
+        margin-top: 8px;
+      }
+
+      .descriptor-panel h3,
+      .prompt-panel h3,
+      .resource-panel h3 {
+        color: var(--navy);
+        font-size: 16px;
+        margin-bottom: 9px;
+      }
+
+      .descriptor-panel > p,
+      .prompt-panel > p,
+      .resource-panel > p {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+        margin-bottom: 14px;
+      }
+
+      .descriptor-list,
+      .resource-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .descriptor,
+      .resource {
+        background: #fff;
+        border: 1px solid #dbe3ec;
+        border-radius: 7px;
+        padding: 12px;
+      }
+
+      .descriptor strong,
+      .resource strong {
+        color: var(--teal-dark);
+        display: block;
+        font-size: 13px;
+        margin-bottom: 5px;
+      }
+
+      .descriptor span,
+      .resource span {
+        color: var(--muted);
+        display: block;
+        font-size: 12px;
+        line-height: 1.42;
+      }
+
+      .resource a {
+        color: var(--navy);
+        display: inline-block;
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 5px;
+      }
+
+      .prompt-grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .prompt-field textarea {
+        min-height: 145px;
+      }
+
+      .v2-grid {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: minmax(430px, 1.15fr) minmax(320px, 0.85fr);
+      }
+
+      .answer-summary {
+        background: #fff;
+        border: 1px solid #dbe3ec;
+        border-radius: 8px;
+        display: grid;
+        gap: 9px;
+        margin-bottom: 14px;
+        padding: 14px;
+      }
+
+      .answer-summary p {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.4;
+      }
+
+      .answer-summary strong {
+        color: var(--navy);
+      }
+
+      .bottom-bar {
+        align-items: center;
+        background: linear-gradient(90deg, #071d3a 0%, #0b315f 100%);
+        bottom: 0;
+        color: #e8eef5;
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        left: 0;
+        min-height: 58px;
+        padding: 10px 22px;
+        position: fixed;
+        right: 0;
+        z-index: 20;
+      }
+
+      .bottom-bar strong {
+        color: #fff;
+      }
+
+      .bottom-bar a {
+        color: #9de3dc;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .bottom-bar span {
+        font-size: 13px;
+        line-height: 1.4;
+        text-align: center;
+      }
+
+      @media (max-width: 960px) {
+        .input-grid,
+        .output-grid,
+        .prompt-grid,
+        .v2-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .brand-row {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 14px;
+        }
+
+        .title-bar-logo {
+          max-width: 100%;
+        }
+      }
+
+      @media (max-width: 640px) {
+        body {
+          padding-bottom: 96px;
+        }
+
+        .shell {
+          padding: 0 14px 28px;
+        }
+
+        .brand-main {
+          align-items: start;
+          flex-direction: column;
+          gap: 14px;
+        }
+
+        .title-bar-logo {
+          height: auto;
+          max-height: 96px;
+        }
+
+        h1 {
+          font-size: 28px;
+        }
+
+        .section-header,
+        .section-body {
+          padding: 17px;
+        }
+
+        .section-body {
+          padding-bottom: 96px;
+        }
+
+        .bottom-bar {
+          align-items: center;
+          flex-direction: column;
+          gap: 4px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header class="top">
+        <div class="brand-row">
+          <div class="brand-main">
+            <div class="title-block">
+              <h1>Competence Standards Builder</h1>
+              <p class="description">
+                Assess your course information against competence standards guidance and generate V1 and V2 standards.
+              </p>
+            </div>
+          </div>
+          <img
+            class="title-bar-logo"
+            src="assets/centre-for-teaching-and-learning-logo.png"
+            alt="University of Oxford Centre for Teaching and Learning"
+          />
+        </div>
+        <nav class="section-nav" aria-label="Tool sections">
+          <a href="#section-1">1. Enter information</a>
+          <a href="#section-2">2. Draft standards</a>
+          <a href="#section-3">3. Prompt questions</a>
+          <a href="#section-4">4. Version 2 and guidance</a>
+        </nav>
+      </header>
+
+      <section class="tool-section" id="section-1">
+        <div class="section-header">
+          <span class="section-number">1</span>
+          <div>
+            <h2>Enter course information</h2>
+            <p>
+              Add the course or programme name, level and the information you want assessed. This
+              can include summative assessments, course learning outcomes and teaching modules.
+            </p>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="input-grid">
+            <form id="course-form">
+              <div class="field">
+                <label for="course-name">Course or programme name</label>
+                <input id="course-name" type="text" placeholder="e.g. MSc Engineering Biology" />
+              </div>
+              <div class="field">
+                <label for="study-level">Level</label>
+                <select id="study-level">
+                  <option value="UG">UG</option>
+                  <option value="PGT" selected>PGT</option>
+                  <option value="PGR">PGR</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="course-info">Assessments, learning outcomes or teaching modules</label>
+                <textarea
+                  id="course-info"
+                  placeholder="Paste or type summative assessments, learning outcomes, module descriptions or course handbook text."
+                ></textarea>
+              </div>
+              <label class="upload-box" for="upload-file">
+                <span class="upload-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M12 3v12m0-12 4.5 4.5M12 3 7.5 7.5"></path>
+                    <path d="M5 15v3.5A2.5 2.5 0 0 0 7.5 21h9a2.5 2.5 0 0 0 2.5-2.5V15"></path>
+                  </svg>
+                </span>
+                <span>
+                  <strong>Upload supporting information</strong>
+                  <small>Accepts .txt, .md, .csv and .docx where supported by the browser.</small>
+                </span>
+                <input id="upload-file" type="file" accept=".txt,.md,.csv,.docx" />
+              </label>
+              <p id="upload-status" class="status-line" role="status"></p>
+              <div class="actions">
+                <button class="primary" type="submit">
+                  Generate draft Competence Standards or Version 1
+                </button>
+              </div>
+            </form>
+
+            <aside class="guidance-box">
+              <h3>Reference lens from the template</h3>
+              <ul>
+                <li>Identify what all students must demonstrate to complete the course successfully.</li>
+                <li>Distinguish competence standards from assessment conditions and administrative requirements.</li>
+                <li>Check that each standard is relevant, justified and proportionate.</li>
+                <li>Separate what is being assessed from how it is assessed.</li>
+                <li>State speaking, listening, handwriting or timed performance only where genuinely essential.</li>
+              </ul>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="tool-section" id="section-2">
+        <div class="section-header">
+          <span class="section-number">2</span>
+          <div>
+            <h2>Draft Competence Standards or Version 1</h2>
+            <p>
+              The generated standards appear as static text for review. Download Version 1 as a
+              Word document before moving to the descriptor and prompt review.
+            </p>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="output-grid">
+            <article class="static-output">
+              <div id="v1-output" class="placeholder">
+                Generate Version 1 from Section 1 to display draft competence standards here.
+              </div>
+              <div class="actions">
+                <button id="download-v1" class="secondary" disabled>
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 3v12m0 0 4-4m-4 4-4-4"></path>
+                    <path d="M5 21h14"></path>
+                  </svg>
+                  Download Version 1 as Word document
+                </button>
+              </div>
+            </article>
+
+            <aside class="descriptor-panel">
+              <h3>Descriptor areas to refer to</h3>
+              <p>
+                Review the draft standards against these descriptor areas. They should help you
+                check whether each standard is about communication, disciplinary knowledge or
+                application of that knowledge.
+              </p>
+              <div class="descriptor-list" id="descriptor-list"></div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="tool-section" id="section-3">
+        <div class="section-header">
+          <span class="section-number">3</span>
+          <div>
+            <h2>Consider the prompt questions</h2>
+            <p>
+              Add more information in response to the three prompts. The answers will be used to
+              generate Version 2 of the competence standards.
+            </p>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="prompt-panel">
+            <h3>Prompt responses</h3>
+            <p>
+              These questions focus the standards on what knowledge, skill and disciplinary
+              application are actually being judged.
+            </p>
+            <div class="prompt-grid">
+              <div class="field prompt-field">
+                <label for="meta-knowledge">What 'meta' knowledge is the student required to demonstrate?</label>
+                <textarea id="meta-knowledge"></textarea>
+              </div>
+              <div class="field prompt-field">
+                <label for="academic-skill">What academic skill is actually being assessed?</label>
+                <textarea id="academic-skill" placeholder="For example, writing or speaking."></textarea>
+              </div>
+              <div class="field prompt-field">
+                <label for="disciplinary-application">What disciplinary application of that knowledge is being judged?</label>
+                <textarea id="disciplinary-application"></textarea>
+              </div>
+            </div>
+            <div class="actions">
+              <button id="generate-v2" class="primary" disabled>Generate Version 2</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="tool-section" id="section-4">
+        <div class="section-header">
+          <span class="section-number">4</span>
+          <div>
+            <h2>Version 2 standards, guidance and resources</h2>
+            <p>
+              Version 2 reflects the prompt responses and includes additional guidance and resource
+              references for course teams.
+            </p>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="v2-grid">
+            <article class="static-output">
+              <div id="v2-output" class="placeholder">
+                Generate Version 2 from Section 3 to display refined competence standards here.
+              </div>
+              <div class="actions">
+                <button id="download-v2" class="secondary" disabled>
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 3v12m0 0 4-4m-4 4-4-4"></path>
+                    <path d="M5 21h14"></path>
+                  </svg>
+                  Download Version 2 as Word document
+                </button>
+              </div>
+            </article>
+
+            <aside class="resource-panel">
+              <h3>Resources and guides</h3>
+              <p>
+                Use these reference points when reviewing whether the standards are relevant,
+                justified, proportionate and distinct from the assessment method.
+              </p>
+              <div class="resource-list" id="resource-list"></div>
+            </aside>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="bottom-bar">
+      <span><strong>Contact the Centre for Teaching and Learning</strong></span>
+      <span>
+        Discuss competence standards and course or assessment design:
+        <a href="mailto:contact@ctl.ox.ac.uk">contact@ctl.ox.ac.uk</a>
+      </span>
+    </div>
+
+    <script>
+      const descriptors = [
+        {
+          name: "Academic communication",
+          text: "The ability to communicate to the required academic standard, principally through writing and, where assessed, speaking."
+        },
+        {
+          name: "Disciplinary knowledge",
+          text: "Demonstrating the concepts, theories, evidence and methods that define the discipline."
+        },
+        {
+          name: "Application of disciplinary knowledge",
+          text: "Applying that knowledge and the methods of the discipline to analyse, interpret or solve subject-specific problems."
+        }
+      ];
+
+      const resources = [
+        {
+          name: "Competence Standards briefing note",
+          text: "Briefing note for course leaders on identifying competence standards for taught degrees.",
+          url: "assets/competence-standards-briefing-note-june-2026.docx"
+        },
+        {
+          name: "Centre for Teaching and Learning",
+          text: "Support for teams designing courses, assessments and competence standards.",
+          url: "https://unioxfordnexus.sharepoint.com/sites/oxintranet-education-student-support/SitePages/Teaching-and-learning.aspx"
+        },
+        {
+          name: "EAF and internal Oxford policy",
+          text: "Institutional policy context for examiners and assessment frameworks.",
+          url: "https://governance.admin.ox.ac.uk/education-committee/policies/examiners-assessment-framework"
+        },
+        {
+          name: "Equality and Human Rights Commission guidance",
+          text: "Technical guidance for further and higher education under the Equality Act 2010.",
+          url: "https://www.equalityhumanrights.com/equality/equality-act-2010/technical-guidance-further-and-higher-education"
+        },
+        {
+          name: "Office of the Independent Adjudicator guidance",
+          text: "Useful resources and footnote references on supporting disabled students.",
+          url: "https://www.oiahe.org.uk/resources-and-publications/good-practice-framework/supporting-disabled-students/useful-resources-and-foot-note-document-references/"
+        },
+        {
+          name: "QAA guidance",
+          text: "Quality Code advice and guidance on concerns, complaints and appeals.",
+          url: "https://www.qaa.ac.uk/the-quality-code/2018/advice-and-guidance-18/concerns-complaints-and-appeals"
+        }
+      ];
+
+      const levelProfiles = {
+        UG: {
+          knowledge: "secure and appropriately guided",
+          analysis: "analyse familiar and emerging problems using relevant disciplinary methods",
+          judgement: "make reasoned judgements using evidence, concepts and feedback"
+        },
+        PGT: {
+          knowledge: "advanced and critically informed",
+          analysis: "analyse complex problems using specialist methods and current evidence",
+          judgement: "make independent critical judgements under conditions of complexity"
+        },
+        PGR: {
+          knowledge: "original, independent and research-led",
+          analysis: "design and justify independent inquiry using advanced disciplinary methods",
+          judgement: "make original scholarly judgements that contribute to disciplinary knowledge"
+        }
+      };
+
+      const stopwords = new Set([
+        "about", "above", "across", "after", "again", "against", "also", "among", "and",
+        "assessment", "assessments", "based", "been", "being", "course", "courses",
+        "demonstrate", "different", "each", "effective", "evidence", "from", "have",
+        "include", "including", "into", "knowledge", "learning", "level", "methods",
+        "module", "modules", "must", "outcome", "outcomes", "programme", "required",
+        "students", "their", "these", "through", "using", "where", "which", "while",
+        "with", "within"
+      ]);
+
+      const state = {
+        v1: null,
+        v2: null
+      };
+
+      const $ = (selector) => document.querySelector(selector);
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function clean(value) {
+        return String(value ?? "").replace(/\s+/g, " ").trim();
+      }
+
+      function sentence(value) {
+        const text = clean(value);
+        return text ? text.charAt(0).toUpperCase() + text.slice(1) : text;
+      }
+
+      function getPayload() {
+        return {
+          courseName: clean($("#course-name").value),
+          level: $("#study-level").value,
+          information: clean($("#course-info").value)
+        };
+      }
+
+      function extractKeywords(text, courseName, limit = 8) {
+        const counts = new Map();
+        const source = `${courseName} ${text}`.toLowerCase();
+        const words = source.match(/[a-z][a-z-]{3,}/g) || [];
+        for (const word of words) {
+          const normalized = word.replace(/^-|-$/g, "");
+          if (!normalized || stopwords.has(normalized)) continue;
+          counts.set(normalized, (counts.get(normalized) || 0) + 1);
+        }
+        return [...counts.entries()]
+          .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+          .slice(0, limit)
+          .map(([word]) => word);
+      }
+
+      function inferModes(text) {
+        const value = text.toLowerCase();
+        const modes = [];
+        const checks = [
+          ["written academic communication", ["essay", "report", "dissertation", "portfolio", "written"]],
+          ["oral communication", ["presentation", "viva", "oral", "speaking", "seminar"]],
+          ["quantitative or computational analysis", ["data", "statistics", "coding", "algorithm", "model"]],
+          ["practical or field-based method", ["lab", "laboratory", "fieldwork", "clinical", "studio", "placement"]],
+          ["collaborative professional practice", ["team", "group", "collaborat", "leadership"]]
+        ];
+        for (const [label, needles] of checks) {
+          if (needles.some((needle) => value.includes(needle))) modes.push(label);
+        }
+        return modes.length ? modes : ["academic communication in formats appropriate to the assessment"];
+      }
+
+      function keywordPhrase(keywords) {
+        if (!keywords.length) return "the concepts, evidence and methods identified in the course information";
+        return keywords.slice(0, 3).join(", ");
+      }
+
+      function topicPhrase(courseName, keywords) {
+        if (courseName) return courseName;
+        if (keywords.length) return keywords.slice(0, 3).join(", ");
+        return "the course or programme";
+      }
+
+      function createStandard(id, title, descriptor, statement, rationale) {
+        return {
+          id,
+          title,
+          descriptor,
+          statement: sentence(statement),
+          rationale: sentence(rationale)
+        };
+      }
+
+      function generateV1() {
+        const payload = getPayload();
+        const profile = levelProfiles[payload.level] || levelProfiles.UG;
+        const keywords = extractKeywords(payload.information, payload.courseName);
+        const course = topicPhrase(payload.courseName, keywords);
+        const focus = keywordPhrase(keywords);
+        const modes = inferModes(payload.information).slice(0, 2).join(", ");
+
+        return [
+          createStandard(
+            "CS1",
+            "Disciplinary knowledge and understanding",
+            "Disciplinary knowledge",
+            `Students must demonstrate ${profile.knowledge} understanding of the concepts, theories, evidence and methods that define ${course}, including where relevant ${focus}.`,
+            "This identifies the disciplinary knowledge all students must show, rather than the particular assessment task used to test it."
+          ),
+          createStandard(
+            "CS2",
+            "Application, analysis and interpretation",
+            "Application of disciplinary knowledge",
+            `Students must apply disciplinary knowledge and methods to ${profile.analysis} in relation to ${focus}.`,
+            "This focuses on the academic ability being judged: applying knowledge to analyse, interpret or solve subject-specific problems."
+          ),
+          createStandard(
+            "CS3",
+            "Academic communication",
+            "Academic communication",
+            `Students must communicate ideas, evidence, methods and judgements to the required academic standard through ${modes}.`,
+            "The standard is framed around communication quality. Specific modes such as speaking or timed writing should be retained only where essential and justified."
+          ),
+          createStandard(
+            "CS4",
+            "Critical judgement and justification",
+            "Application of disciplinary knowledge",
+            `Students must ${profile.judgement} and explain the rationale for their academic, research, design or professional decisions.`,
+            "This helps distinguish proportionate competence standards from habits of teaching delivery, assessment format or administrative requirements."
+          )
+        ];
+      }
+
+      function generateV2() {
+        const payload = getPayload();
+        const profile = levelProfiles[payload.level] || levelProfiles.UG;
+        const keywords = extractKeywords(payload.information, payload.courseName);
+        const course = topicPhrase(payload.courseName, keywords);
+        const focus = keywordPhrase(keywords);
+        const answers = {
+          metaKnowledge: clean($("#meta-knowledge").value),
+          academicSkill: clean($("#academic-skill").value),
+          disciplinaryApplication: clean($("#disciplinary-application").value)
+        };
+        const meta = answers.metaKnowledge || `the key concepts, theories, evidence and methods in ${course}`;
+        const skill = answers.academicSkill || "communicating academic reasoning to the required standard";
+        const application = answers.disciplinaryApplication || `analysing and interpreting subject-specific problems involving ${focus}`;
+
+        return {
+          answers,
+          standards: [
+            createStandard(
+              "CS1",
+              "Meta knowledge and disciplinary understanding",
+              "Disciplinary knowledge",
+              `Students must demonstrate ${profile.knowledge} understanding of ${meta}, showing how this knowledge defines the disciplinary expectations of ${course}.`,
+              "This version makes the expected meta knowledge explicit so that the standard can be justified against course aims and learning outcomes."
+            ),
+            createStandard(
+              "CS2",
+              "Assessed academic communication skill",
+              "Academic communication",
+              `Students must demonstrate ${skill} at the required academic standard, using a mode of communication only where that mode is itself essential to the course outcome.`,
+              "This separates the communication competence from the assessment vehicle, and keeps writing or speaking specific only where the course team can justify it."
+            ),
+            createStandard(
+              "CS3",
+              "Disciplinary application and judgement",
+              "Application of disciplinary knowledge",
+              `Students must apply ${meta} to ${application}, making reasoned judgements supported by appropriate disciplinary evidence and methods.`,
+              "This states the disciplinary use of knowledge being judged, rather than the teaching activity, assessment condition or administrative process."
+            ),
+            createStandard(
+              "CS4",
+              "Proportionate evidence of competence",
+              "Application of disciplinary knowledge",
+              "Students must provide sufficient academic evidence that they have met the standard in a way that is relevant, justified and proportionate to the course outcome.",
+              "This prompts the course team to keep reasonable adjustments and alternative assessment routes in view unless a particular task form is essential."
+            )
+          ]
+        };
+      }
+
+      function renderStandards(target, standards, options = {}) {
+        const container = $(target);
+        const summary = options.answers
+          ? `<div class="answer-summary">
+              <p><strong>Meta knowledge:</strong> ${escapeHtml(options.answers.metaKnowledge || "Not specified; generated from course information.")}</p>
+              <p><strong>Academic skill:</strong> ${escapeHtml(options.answers.academicSkill || "Not specified; generated from course information.")}</p>
+              <p><strong>Disciplinary application:</strong> ${escapeHtml(options.answers.disciplinaryApplication || "Not specified; generated from course information.")}</p>
+            </div>`
+          : "";
+        container.className = "standards-list";
+        container.innerHTML = `${summary}${standards
+          .map(
+            (item) => `<article class="standard">
+              <h3>${escapeHtml(item.id)}. ${escapeHtml(item.title)}</h3>
+              <p>${escapeHtml(item.statement)}</p>
+              <p class="meta"><strong>${escapeHtml(item.descriptor)}:</strong> ${escapeHtml(item.rationale)}</p>
+            </article>`
+          )
+          .join("")}`;
+      }
+
+      function renderStaticLists() {
+        $("#descriptor-list").innerHTML = descriptors
+          .map((item) => `<div class="descriptor"><strong>${escapeHtml(item.name)}</strong><span>${escapeHtml(item.text)}</span></div>`)
+          .join("");
+        $("#resource-list").innerHTML = resources
+          .map((item) => `<div class="resource"><a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.name)}</a><span>${escapeHtml(item.text)}</span></div>`)
+          .join("");
+      }
+
+      async function readUpload(file) {
+        const extension = file.name.split(".").pop().toLowerCase();
+        if (extension === "docx") {
+          const buffer = await file.arrayBuffer();
+          return extractDocxText(buffer);
+        }
+        return file.text();
+      }
+
+      async function extractDocxText(arrayBuffer) {
+        const files = await unzipStoreOrDeflate(arrayBuffer);
+        const documentXml = files["word/document.xml"];
+        if (!documentXml) throw new Error("Could not find word/document.xml in the DOCX file.");
+        const xml = new TextDecoder().decode(documentXml);
+        const doc = new DOMParser().parseFromString(xml, "application/xml");
+        const textNodes = [...doc.getElementsByTagNameNS("*", "t")];
+        return textNodes.map((node) => node.textContent).join(" ").replace(/\s+/g, " ").trim();
+      }
+
+      async function unzipStoreOrDeflate(arrayBuffer) {
+        const bytes = new Uint8Array(arrayBuffer);
+        const view = new DataView(arrayBuffer);
+        let eocd = -1;
+        for (let i = bytes.length - 22; i >= 0; i--) {
+          if (view.getUint32(i, true) === 0x06054b50) {
+            eocd = i;
+            break;
+          }
+        }
+        if (eocd < 0) throw new Error("Invalid ZIP file.");
+        const entryCount = view.getUint16(eocd + 10, true);
+        const centralOffset = view.getUint32(eocd + 16, true);
+        const result = {};
+        let ptr = centralOffset;
+        for (let entry = 0; entry < entryCount; entry++) {
+          if (view.getUint32(ptr, true) !== 0x02014b50) throw new Error("Invalid central directory.");
+          const method = view.getUint16(ptr + 10, true);
+          const compressedSize = view.getUint32(ptr + 20, true);
+          const nameLength = view.getUint16(ptr + 28, true);
+          const extraLength = view.getUint16(ptr + 30, true);
+          const commentLength = view.getUint16(ptr + 32, true);
+          const localOffset = view.getUint32(ptr + 42, true);
+          const name = new TextDecoder().decode(bytes.slice(ptr + 46, ptr + 46 + nameLength));
+          const localNameLength = view.getUint16(localOffset + 26, true);
+          const localExtraLength = view.getUint16(localOffset + 28, true);
+          const dataStart = localOffset + 30 + localNameLength + localExtraLength;
+          const compressed = bytes.slice(dataStart, dataStart + compressedSize);
+          if (method === 0) {
+            result[name] = compressed;
+          } else if (method === 8 && "DecompressionStream" in window) {
+            const stream = new Blob([compressed]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+            result[name] = new Uint8Array(await new Response(stream).arrayBuffer());
+          }
+          ptr += 46 + nameLength + extraLength + commentLength;
+        }
+        return result;
+      }
+
+      function downloadDocx(version) {
+        const payload = getPayload();
+        const data = version === "v2" ? state.v2 : { standards: state.v1, answers: null };
+        if (!data || !data.standards) return;
+        const docx = createDocx({
+          version,
+          courseName: payload.courseName || "Course or programme",
+          level: payload.level,
+          standards: data.standards,
+          answers: data.answers,
+          includeResources: version === "v2"
+        });
+        const blob = new Blob([docx], {
+          type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${safeName(payload.courseName || "competence-standards")}-${version}.docx`;
+        document.body.append(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      function createDocx({ version, courseName, level, standards, answers, includeResources }) {
+        const body = [];
+        body.push(paragraph(`${version.toUpperCase()} competence standards`, "Title"));
+        body.push(paragraph(`${courseName} | Level: ${level}`, "Subtitle"));
+        body.push(paragraph("Generated prototype output for academic review. Course teams should check that each standard is relevant, justified, proportionate and distinct from assessment conditions."));
+        if (answers) {
+          body.push(paragraph("Prompt answers used for Version 2", "Heading1"));
+          body.push(paragraph(`Meta knowledge: ${answers.metaKnowledge || "Not specified; generated from course information."}`));
+          body.push(paragraph(`Academic skill: ${answers.academicSkill || "Not specified; generated from course information."}`));
+          body.push(paragraph(`Disciplinary application: ${answers.disciplinaryApplication || "Not specified; generated from course information."}`));
+        }
+        body.push(paragraph("Draft competence standards", "Heading1"));
+        for (const item of standards) {
+          body.push(paragraph(`${item.id}. ${item.title}`, "Heading2"));
+          body.push(paragraph(item.statement));
+          body.push(paragraph(`Descriptor: ${item.descriptor}`));
+          body.push(paragraph(`Template lens: ${item.rationale}`));
+        }
+        body.push(paragraph("Descriptor reference", "Heading1"));
+        for (const item of descriptors) {
+          body.push(paragraph(`${item.name}: ${item.text}`));
+        }
+        if (includeResources) {
+          body.push(paragraph("Further resources and guidance", "Heading1"));
+          body.push(paragraph("Use these reference points when reviewing whether standards are relevant, justified, proportionate and distinct from the assessment method."));
+          for (const item of resources) {
+            body.push(paragraph(`${item.name}: ${item.text} ${item.url}`));
+          }
+          body.push(paragraph("For a discussion about competence standards and course or assessment design, contact contact@ctl.ox.ac.uk."));
+        }
+
+        const documentXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+          <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+            <w:body>
+              ${body.join("")}
+              <w:sectPr>
+                <w:pgSz w:w="12240" w:h="15840"/>
+                <w:pgMar w:top="1080" w:right="1080" w:bottom="1080" w:left="1080" w:header="720" w:footer="720" w:gutter="0"/>
+              </w:sectPr>
+            </w:body>
+          </w:document>`;
+        return zipFiles({
+          "[Content_Types].xml": `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+              <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+              <Default Extension="xml" ContentType="application/xml"/>
+              <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+              <Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/>
+              <Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/>
+            </Types>`,
+          "_rels/.rels": `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+              <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
+              <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/>
+              <Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="docProps/app.xml"/>
+            </Relationships>`,
+          "docProps/core.xml": `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+              <dc:title>${xmlEscape(version.toUpperCase())} competence standards</dc:title>
+              <dc:creator>Competence Standards Tool</dc:creator>
+              <dcterms:created xsi:type="dcterms:W3CDTF">${new Date().toISOString()}</dcterms:created>
+            </cp:coreProperties>`,
+          "docProps/app.xml": `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties">
+              <Application>Competence Standards Tool</Application>
+            </Properties>`,
+          "word/document.xml": documentXml
+        });
+      }
+
+      function paragraph(text, style) {
+        const styleXml = style ? `<w:pPr><w:pStyle w:val="${style}"/></w:pPr>` : "";
+        return `<w:p>${styleXml}<w:r><w:t xml:space="preserve">${xmlEscape(text)}</w:t></w:r></w:p>`;
+      }
+
+      function xmlEscape(value) {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&apos;");
+      }
+
+      function safeName(value) {
+        return clean(value).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "competence-standards";
+      }
+
+      function zipFiles(files) {
+        const encoder = new TextEncoder();
+        const localParts = [];
+        const centralParts = [];
+        let offset = 0;
+        for (const [name, content] of Object.entries(files)) {
+          const nameBytes = encoder.encode(name);
+          const data = encoder.encode(content);
+          const crc = crc32(data);
+          const local = new Uint8Array(30 + nameBytes.length);
+          const localView = new DataView(local.buffer);
+          localView.setUint32(0, 0x04034b50, true);
+          localView.setUint16(4, 20, true);
+          localView.setUint16(6, 0, true);
+          localView.setUint16(8, 0, true);
+          localView.setUint16(10, 0, true);
+          localView.setUint16(12, 0, true);
+          localView.setUint32(14, crc, true);
+          localView.setUint32(18, data.length, true);
+          localView.setUint32(22, data.length, true);
+          localView.setUint16(26, nameBytes.length, true);
+          local.set(nameBytes, 30);
+          localParts.push(local, data);
+
+          const central = new Uint8Array(46 + nameBytes.length);
+          const centralView = new DataView(central.buffer);
+          centralView.setUint32(0, 0x02014b50, true);
+          centralView.setUint16(4, 20, true);
+          centralView.setUint16(6, 20, true);
+          centralView.setUint16(8, 0, true);
+          centralView.setUint16(10, 0, true);
+          centralView.setUint16(12, 0, true);
+          centralView.setUint16(14, 0, true);
+          centralView.setUint32(16, crc, true);
+          centralView.setUint32(20, data.length, true);
+          centralView.setUint32(24, data.length, true);
+          centralView.setUint16(28, nameBytes.length, true);
+          centralView.setUint32(42, offset, true);
+          central.set(nameBytes, 46);
+          centralParts.push(central);
+          offset += local.length + data.length;
+        }
+        const centralOffset = offset;
+        const centralSize = centralParts.reduce((sum, part) => sum + part.length, 0);
+        const end = new Uint8Array(22);
+        const endView = new DataView(end.buffer);
+        endView.setUint32(0, 0x06054b50, true);
+        endView.setUint16(8, Object.keys(files).length, true);
+        endView.setUint16(10, Object.keys(files).length, true);
+        endView.setUint32(12, centralSize, true);
+        endView.setUint32(16, centralOffset, true);
+        return concatUint8([...localParts, ...centralParts, end]);
+      }
+
+      function concatUint8(parts) {
+        const total = parts.reduce((sum, part) => sum + part.length, 0);
+        const output = new Uint8Array(total);
+        let offset = 0;
+        for (const part of parts) {
+          output.set(part, offset);
+          offset += part.length;
+        }
+        return output;
+      }
+
+      function crc32(data) {
+        let crc = -1;
+        for (let i = 0; i < data.length; i++) {
+          crc = (crc >>> 8) ^ crcTable[(crc ^ data[i]) & 0xff];
+        }
+        return (crc ^ -1) >>> 0;
+      }
+
+      const crcTable = (() => {
+        const table = new Uint32Array(256);
+        for (let i = 0; i < 256; i++) {
+          let c = i;
+          for (let k = 0; k < 8; k++) {
+            c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+          }
+          table[i] = c >>> 0;
+        }
+        return table;
+      })();
+
+      renderStaticLists();
+
+      $("#course-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        state.v1 = generateV1();
+        renderStandards("#v1-output", state.v1);
+        $("#download-v1").disabled = false;
+        $("#generate-v2").disabled = false;
+        document.querySelector("#section-2").scrollIntoView({ block: "start" });
+      });
+
+      $("#generate-v2").addEventListener("click", () => {
+        state.v2 = generateV2();
+        renderStandards("#v2-output", state.v2.standards, { answers: state.v2.answers });
+        $("#download-v2").disabled = false;
+        document.querySelector("#section-4").scrollIntoView({ block: "start" });
+      });
+
+      $("#download-v1").addEventListener("click", () => downloadDocx("v1"));
+      $("#download-v2").addEventListener("click", () => downloadDocx("v2"));
+
+      $("#upload-file").addEventListener("change", async (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        const status = $("#upload-status");
+        status.textContent = `Reading ${file.name}...`;
+        try {
+          const text = await readUpload(file);
+          const prefix = $("#course-info").value.trim() ? "\n\n" : "";
+          $("#course-info").value = `${$("#course-info").value}${prefix}[Uploaded: ${file.name}]\n${text}`.trim();
+          status.textContent = `${file.name} added to the information box.`;
+        } catch (error) {
+          status.textContent = `Could not read ${file.name}. Paste the relevant text instead. ${error.message}`;
+        }
+      });
+    </script>
+  </body>
+</html>
